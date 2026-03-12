@@ -1,5 +1,5 @@
-import { motion, useMotionValue, useTransform } from "framer-motion";
-import { useEffect } from "react";
+import { motion, useMotionValue, useTransform, useSpring } from "framer-motion";
+import { useEffect, useState } from "react";
 
 import Section from "../../shared/Section";
 import Button from "../../shared/Button";
@@ -44,6 +44,8 @@ const scooterEntrance = {
 };
 
 function Hero() {
+  const [parallaxEnabled, setParallaxEnabled] = useState(false);
+
   function handleCTA() {
     const section = document.getElementById("join");
 
@@ -55,16 +57,33 @@ function Hero() {
     }
   }
 
+  // RAW mouse values
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const rotateY = useTransform(mouseX, [-500, 500], [-5, 5]);
-  const rotateX = useTransform(mouseY, [-500, 500], [5, -5]);
+  // SMOOTHED values (removes jitter)
+  const smoothX = useSpring(mouseX, {
+    stiffness: 40,
+    damping: 20,
+    mass: 0.5,
+  });
 
-  const moveX = useTransform(mouseX, [-500, 500], [-18, 18]);
-  const moveY = useTransform(mouseY, [-500, 500], [-10, 10]);
+  const smoothY = useSpring(mouseY, {
+    stiffness: 40,
+    damping: 20,
+    mass: 0.5,
+  });
+
+  // transforms
+  const rotateY = useTransform(smoothX, [-500, 500], [-5, 5]);
+  const rotateX = useTransform(smoothY, [-500, 500], [5, -5]);
+
+  const moveX = useTransform(smoothX, [-500, 500], [-18, 18]);
+  const moveY = useTransform(smoothY, [-500, 500], [-10, 10]);
 
   useEffect(() => {
+    if (!parallaxEnabled) return;
+
     function handleMove(e) {
       const x = e.clientX - window.innerWidth / 2;
       const y = e.clientY - window.innerHeight / 2;
@@ -76,7 +95,7 @@ function Hero() {
     window.addEventListener("mousemove", handleMove);
 
     return () => window.removeEventListener("mousemove", handleMove);
-  }, [mouseX, mouseY]);
+  }, [mouseX, mouseY, parallaxEnabled]);
 
   return (
     <Section
@@ -114,10 +133,11 @@ function Hero() {
           </Button>
         </motion.div>
 
-        {/* SCOOTER AREA */}
+        {/* SCOOTER */}
 
         <motion.div
           variants={scooterEntrance}
+          onAnimationComplete={() => setParallaxEnabled(true)}
           className="relative z-10 -mt-30 ml-40 flex items-center justify-center md:mt-0 md:-ml-40"
           style={{
             rotateX,
@@ -145,7 +165,7 @@ function Hero() {
             }}
           />
 
-          {/* SCOOTER */}
+          {/* SCOOTER IMAGE */}
 
           <motion.img
             src={x5MaxImage}

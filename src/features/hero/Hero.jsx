@@ -4,8 +4,8 @@ import { useEffect } from "react";
 import Section from "../../shared/Section";
 import Button from "../../shared/Button";
 
-import x5MaxImage from "../../assets/x-5max.png";
-import heroImage from "../../assets/bg-images/bg-hero.jpg";
+import x5MaxImage from "../../assets/x-5max.webp";
+import heroImage from "../../assets/bg-images/bg-hero.webp";
 
 const container = {
   hidden: {},

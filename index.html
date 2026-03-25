@@ -6,26 +6,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Xiaomi</title>
 
-    <script>
-      (function () {
-        const theme =
-          localStorage.getItem("theme") ||
-          (window.matchMedia("(prefers-color-scheme: light)").matches
-            ? "light"
-            : "dark");
-        document.documentElement.setAttribute("data-theme", theme);
-      })();
-    </script>
-
     <style>
       :root {
         --color-bg: hsl(0, 0%, 5%);
         --color-text: hsl(210, 12%, 94%);
-      }
-
-      :root[data-theme="light"] {
-        --color-bg: hsl(0, 0%, 98%);
-        --color-text: hsl(210, 15%, 10%);
       }
 
       body {

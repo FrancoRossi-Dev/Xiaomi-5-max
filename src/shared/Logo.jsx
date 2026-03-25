@@ -1,5 +1,4 @@
 import logo from "../assets/logo.svg";
-import ChangeTheme from "./ChangeTheme";
 
 function Logo({ cn }) {
   return (
